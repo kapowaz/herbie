@@ -1,6 +1,6 @@
 module Herbie
   module Helpers
-    def tag(name, attrs = {}, &block)
+    def tag(name, attrs={}, &block)
       if block_given?
         erb_concat "<#{name}#{' ' + attributes(attrs) unless attrs.nil? || attrs.empty?}>#{capture_erb(&block)}</#{name}>"
       elsif !attrs[:content].nil?
@@ -31,11 +31,17 @@ module Herbie
         :rel  => "stylesheet",
         :type => "text/css"
       }
-      href = "/stylesheets/#{href}" unless href.match(/^\//)
-      attrs = default_attrs.merge({:href => href}.merge(attrs))
-      "#{tag :link, attrs}"
+      
+      if block_given?
+        default_attrs.delete :rel
+        erb_concat "#{tag :style, default_attrs.merge(attrs)}\n#{capture_erb(&block)}\n</style>"
+      else
+        href = "/stylesheets/#{href}" unless href.match(/^\//)
+        attrs = default_attrs.merge({:href => href}.merge(attrs))
+        "#{tag :link, attrs}"        
+      end
     end
-  
+    
     def link(href, text=nil, attrs={}, &block)
       attrs = {:href => href}.merge(attrs)
       if block_given?
@@ -43,11 +49,6 @@ module Herbie
       else
         "#{tag :a, attrs}#{text ||= attrs[:href]}</a>"
       end
-    end
-
-    # N.B. This actually relies on Sinatra's erb method, so should probably belong elsewhere (or this gem depend on sinatra?)
-    def partial(template, options={})
-      erb "partials/_#{template}".to_sym, options.merge(:layout => false)
     end
     
   end
