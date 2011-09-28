@@ -5,14 +5,26 @@ describe Herbie::Helpers do
   include Herbie::Helpers
   
   it "should be able to output a simple tag" do
-    img = {
+    attrs = {
       :src    => "/path/to/image.jpg",
       :height => 320,
       :width  => 640,
       :alt    => "An image of something"
     }
     
-    tag(:img, img).should == "<img src=\"#{img[:src]}\" height=\"#{img[:height]}\" width=\"#{img[:width]}\" alt=\"#{img[:alt]}\">"
+    tag(:img, attrs).should == "<img src=\"#{attrs[:src]}\" height=\"#{attrs[:height]}\" width=\"#{attrs[:width]}\" alt=\"#{attrs[:alt]}\">"
+  end
+  
+  it "should not output attributes whose values are nil" do
+    
+    attrs = {
+      :type    => "checkbox",
+      :name    => "stay_logged_in",
+      :value   => "true",
+      :checked => nil
+    }
+    
+    tag(:input, attrs).should == "<input type=\"#{attrs[:type]}\" name=\"#{attrs[:name]}\" value=\"#{attrs[:value]}\">"
   end
   
   describe "script helpers" do
@@ -69,7 +81,7 @@ describe Herbie::Helpers do
         :class => "navigation",
         :target => "_parent"
       }
-      link(href, text, attrs).should == "<a href=\"#{href}\" class=\"navigation\" target=\"_parent\">#{text}</a>"
+      link(href, text, attrs).should == "<a href=\"#{href}\" class=\"#{attrs[:class]}\" target=\"#{attrs[:target]}\">#{text}</a>"
     end
     
     # TODO: test for links that accept blocks (e.g. <a href="#"><img src="foo.png"></a>)

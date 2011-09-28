@@ -1,7 +1,8 @@
 module Herbie
   module Helpers
-    
     def tag(name, attrs = {}, &block)
+      attrs.each_pair {|key, value| attrs.delete key if value.nil?}
+      
       if block_given?
         erb_concat "<#{name}#{' ' + attributes(attrs) unless attrs.nil? || attrs.empty?}>#{capture_erb(&block)}</#{name}>"
       elsif !attrs[:content].nil?
