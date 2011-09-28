@@ -16,7 +16,6 @@ describe Herbie::Helpers do
   end
   
   it "should not output attributes whose values are nil" do
-    
     attrs = {
       :type    => "checkbox",
       :name    => "stay_logged_in",
@@ -25,6 +24,17 @@ describe Herbie::Helpers do
     }
     
     tag(:input, attrs).should == "<input type=\"#{attrs[:type]}\" name=\"#{attrs[:name]}\" value=\"#{attrs[:value]}\">"
+  end
+  
+  it "should output just the property name for attributes with a boolean value of true" do
+    attrs = {
+      :type    => "checkbox",
+      :name    => "stay_logged_in",
+      :value   => "true",
+      :checked => true
+    }
+    
+    tag(:input, attrs).should == "<input type=\"#{attrs[:type]}\" name=\"#{attrs[:name]}\" value=\"#{attrs[:value]}\" checked>"
   end
   
   describe "script helpers" do

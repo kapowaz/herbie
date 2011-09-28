@@ -10,7 +10,13 @@ module Herbie
     def attributes(hash)
       a = []
       hash.each_pair do |k,v|
-        a.push "#{snake_case(k.to_s).sub(/^(.{1,1})/) { |m| m.downcase }}=\"#{v}\""
+        unless v.nil?
+          if v === true
+            a.push "#{snake_case(k.to_s).sub(/^(.{1,1})/) { |m| m.downcase }}"
+          else
+            a.push "#{snake_case(k.to_s).sub(/^(.{1,1})/) { |m| m.downcase }}=\"#{v}\""
+          end
+        end
       end
       a.join(' ')
     end 
