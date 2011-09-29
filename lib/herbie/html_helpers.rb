@@ -42,7 +42,7 @@ module Herbie
       end
     end
     
-    def link(href, text=nil, attrs={}, &block)
+    def link_to(href, text=nil, attrs={}, &block)
       attrs = {:href => href}.merge(attrs)
       if block_given?
         erb_concat "#{tag :a, attrs}#{capture_erb(&block)}</a>"

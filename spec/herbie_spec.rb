@@ -78,13 +78,13 @@ describe Herbie::Helpers do
   describe "link helpers" do
     it "should be able to output a simple link" do
       href = "http://www.foo.com/"
-      link(href).should == "<a href=\"#{href}\">#{href}</a>"
+      link_to(href).should == "<a href=\"#{href}\">#{href}</a>"
     end
     
     it "should be able to output a link with href and text" do
       href = "http://www.foo.com/"
       text = "Visit foo.com"
-      link(href, text).should == "<a href=\"#{href}\">#{text}</a>"
+      link_to(href, text).should == "<a href=\"#{href}\">#{text}</a>"
     end
     
     it "should be able to output links with arbitrary attributes" do
@@ -94,7 +94,7 @@ describe Herbie::Helpers do
         :class => "navigation",
         :target => "_parent"
       }
-      link(href, text, attrs).should == "<a href=\"#{href}\" class=\"#{attrs[:class]}\" target=\"#{attrs[:target]}\">#{text}</a>"
+      link_to(href, text, attrs).should == "<a href=\"#{href}\" class=\"#{attrs[:class]}\" target=\"#{attrs[:target]}\">#{text}</a>"
     end
     
     it "should be able to output a link enclosing arbitrary markup provided by a block" do
@@ -105,7 +105,7 @@ describe Herbie::Helpers do
         :class => "image"
       }
       markup_block = Proc.new { tag :img, :src => "foo.png" }
-      link(href, text, attrs, &markup_block).should == "<a href=\"#{href}\" class=\"#{attrs[:class]}\">#{capture_erb(&markup_block)}</a>"
+      link_to(href, text, attrs, &markup_block).should == "<a href=\"#{href}\" class=\"#{attrs[:class]}\">#{capture_erb(&markup_block)}</a>"
     end
   end
 end
