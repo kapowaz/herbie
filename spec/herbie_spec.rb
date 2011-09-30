@@ -71,7 +71,7 @@ describe Herbie::Helpers do
       pending "Need a mechanism for capturing erb output within a passed block"
       media     = "screen and (min-width:500px)"
       css_block = Proc.new { "body { font-family:'Helvetica'; }" }
-      style({:media => media}, &css_block).should == "<script type=\"text/css\" media=\"#{media}\">\n#{capture_erb(&css_block)}\n</script>"
+      style({:media => media}, &css_block).should == "<style type=\"text/css\" media=\"#{media}\">\n#{capture_erb(&css_block)}\n</style>"
     end
   end
   
