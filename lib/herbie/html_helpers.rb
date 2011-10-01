@@ -20,7 +20,7 @@ module Herbie
       if block_given?
         erb_concat "#{tag :script, attrs}\n#{capture_erb(&block)}\n</script>"
       else
-        source = "/javascripts/#{source}" unless source.nil? || source.match(/^\//)
+        source = "/javascripts/#{source}" unless source.nil? || source.match(/^\//) || source.match(/^http/)
         attrs = attrs.merge({:src => source})
         "#{tag :script, attrs}</script>"
       end

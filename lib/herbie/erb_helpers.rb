@@ -1,6 +1,6 @@
 module Herbie
   module Helpers
-    
+    private
     def erb_with_output_buffer(buf = '')
       @_out_buf, old_buffer = buf, @_out_buf
       yield

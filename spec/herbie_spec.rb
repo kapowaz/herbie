@@ -46,6 +46,10 @@ describe Herbie::Helpers do
       script("/path/to/script.js").should == "<script type=\"text/javascript\" charset=\"utf-8\" src=\"/path/to/script.js\"></script>"
     end
     
+    it "should output a script with an absolute path to the script if the path provided begins with http" do
+      script("http://code.jquery.com/jquery.js").should == "<script type=\"text/javascript\" charset=\"utf-8\" src=\"http://code.jquery.com/jquery.js\"></script>"
+    end
+    
     it "should output a script element with arbitrary javascript content provided by a block" do
       pending "Need a mechanism for capturing erb output within a passed block"
       script_block = Proc.new { "function hello_world(){ console.log(\"hello world!\"); }" }
