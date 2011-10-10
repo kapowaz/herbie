@@ -14,7 +14,7 @@ module Herbie
     end
 
     def erb_concat(text)
-      @_out_buf << text if !@_out_buf.nil?
+      @_out_buf << text unless @_out_buf.nil?
     end
     
   end

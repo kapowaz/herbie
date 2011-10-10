@@ -2,13 +2,38 @@ module Herbie
   module Helpers
     def tag(name, attrs={}, &block)
       if block_given?
-        erb_concat "<#{name}#{' ' + attributes(attrs) unless attrs.nil? || attrs.empty?}>#{capture_erb(&block)}</#{name}>"
+        erb_concat "<#{name}#{' ' + attributes(attrs) unless attrs.nil? || attrs.empty?}>#{capture_erb(&block)}</#{name}>" # if we're capturing ERB...
+        "<#{name}#{' ' + attributes(attrs) unless attrs.empty?}>#{block.call}</#{name}>" # if we're nesting function calls...
       elsif !attrs[:content].nil?
         content = attrs.delete :content
-        "<#{name}#{' ' + attributes(attrs) unless attrs.nil? || attrs.empty?}>#{content}</#{name}>"
+        "<#{name}#{' ' + attributes(attrs) unless attrs.empty?}>#{content}</#{name}>"
       else
-        "<#{name}#{' ' + attributes(attrs) unless attrs.nil? || attrs.empty?}>"
+        "<#{name}#{' ' + attributes(attrs) unless attrs.empty?}>"
       end
+    end
+    
+    # work in progress...
+    def tags(name, collection, attrs={}, &block)
+      cycle = attrs.delete :cycle
+      result = ""
+      collection.each_with_index do |item, i|
+        a = attrs.dup
+        
+        unless cycle.nil?
+          c = a.delete :class
+          classes = []
+          classes << c unless c.nil?
+          classes << cycle[:even] if i.even? && cycle.key?(:even)
+          classes << cycle[:odd] if i.odd? && cycle.key?(:odd)
+          a[:class] = classes.join " " unless classes.empty?
+        end
+        
+        result += tag name, a do
+          block.call(item)
+        end
+        result += "\n"
+      end
+      result
     end
   
     def script(source=nil, &block)

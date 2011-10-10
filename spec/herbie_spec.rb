@@ -4,37 +4,85 @@ require_relative "../lib/herbie.rb"
 describe Herbie::Helpers do
   include Herbie::Helpers
   
-  it "should be able to output a simple tag" do
-    attrs = {
-      :src    => "/path/to/image.jpg",
-      :height => 320,
-      :width  => 640,
-      :alt    => "An image of something"
-    }
+  describe "tag helpers" do
+    it "should be able to output a simple tag" do
+      attrs = {
+        :src    => "/path/to/image.jpg",
+        :height => 320,
+        :width  => 640,
+        :alt    => "An image of something"
+      }
+
+      tag(:img, attrs).should == "<img src=\"#{attrs[:src]}\" height=\"#{attrs[:height]}\" width=\"#{attrs[:width]}\" alt=\"#{attrs[:alt]}\">"
+    end
+
+    it "should not output attributes whose values are nil" do
+      attrs = {
+        :type    => "checkbox",
+        :name    => "stay_logged_in",
+        :value   => "true",
+        :checked => nil
+      }
+
+      tag(:input, attrs).should == "<input type=\"#{attrs[:type]}\" name=\"#{attrs[:name]}\" value=\"#{attrs[:value]}\">"
+    end
+
+    it "should output just the property name for attributes with a boolean value of true" do
+      attrs = {
+        :type    => "checkbox",
+        :name    => "stay_logged_in",
+        :value   => "true",
+        :checked => true
+      }
+
+      tag(:input, attrs).should == "<input type=\"#{attrs[:type]}\" name=\"#{attrs[:name]}\" value=\"#{attrs[:value]}\" checked>"
+    end
+
+    it "should output all nested tag method calls" do
+      markup = "<div class=\"container\"><h1>Status Report</h1></div>"
+      result = tag :div, :class => "container" do
+        tag :h1, :content => "Status Report"
+      end
+      result.should == markup
+    end
+
+    it "should output a collection of tags" do
+      markup = <<-MARKUP
+<li><a href="/" title="Back to the homepage">Home</a></li>
+<li><a href="/shop" title="View all our products">Shop</a></li>
+<li><a href="/orders" title="View your existing orders">Orders</a></li>
+<li><a href="/contactus" title="Get in touch with us">Contact Us</a></li>
+<li><a href="/help" title="Can't find what you need? Get help here">Help</a></li>
+MARKUP
+      
+      navigation_items = [
+        {:text => "Home", :href => "/", :title => "Back to the homepage"},
+        {:text => "Shop", :href => "/shop", :title => "View all our products"},
+        {:text => "Orders", :href => "/orders", :title => "View your existing orders"},
+        {:text => "Contact Us", :href => "/contactus", :title => "Get in touch with us"},
+        {:text => "Help", :href => "/help", :title => "Can't find what you need? Get help here"}
+      ]
+      result = tags :li, navigation_items do |item|
+        link_to item[:href], item[:text], :title => item[:title]
+      end
+      result.should == markup
+    end
     
-    tag(:img, attrs).should == "<img src=\"#{attrs[:src]}\" height=\"#{attrs[:height]}\" width=\"#{attrs[:width]}\" alt=\"#{attrs[:alt]}\">"
-  end
-  
-  it "should not output attributes whose values are nil" do
-    attrs = {
-      :type    => "checkbox",
-      :name    => "stay_logged_in",
-      :value   => "true",
-      :checked => nil
-    }
-    
-    tag(:input, attrs).should == "<input type=\"#{attrs[:type]}\" name=\"#{attrs[:name]}\" value=\"#{attrs[:value]}\">"
-  end
-  
-  it "should output just the property name for attributes with a boolean value of true" do
-    attrs = {
-      :type    => "checkbox",
-      :name    => "stay_logged_in",
-      :value   => "true",
-      :checked => true
-    }
-    
-    tag(:input, attrs).should == "<input type=\"#{attrs[:type]}\" name=\"#{attrs[:name]}\" value=\"#{attrs[:value]}\" checked>"
+    it "should allow an arbitrary class to be added to alternating elements within the collection" do
+      markup = <<-MARKUP
+<li class="even">Annie</li>
+<li>Brenda</li>
+<li class="even">Charlie</li>
+<li>Davinia</li>
+<li class="even">Emma</li>
+MARKUP
+
+      names = ['Annie', 'Brenda', 'Charlie', 'Davinia', 'Emma']
+      result = tags :li, names, :cycle => {:even => "even"} do |name|
+        name
+      end
+      result.should == markup
+    end
   end
   
   describe "script helpers" do
