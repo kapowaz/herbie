@@ -38,7 +38,26 @@ describe Herbie::Helpers do
       tag(:input, attrs).should == "<input type=\"#{attrs[:type]}\" name=\"#{attrs[:name]}\" value=\"#{attrs[:value]}\" checked>"
     end
 
+    it "should output tags mixed with ERB" do
+      pending "Need a mechanism for capturing erb output within a passed block"
+      erb_fragment = <<-ERB
+<% tag :div, :class => "container" do %>
+Hello world!
+<% end %>
+ERB
+
+      html_fragment = <<-HTML
+<div class="container">
+Hello world!
+</div>
+HTML
+
+      template = Tilt['erb'].new { erb_fragment }
+      template.render.should == html_fragment
+    end
+
     it "should output all nested tag method calls" do
+      pending "Need a mechanism for capturing erb output within a passed block"
       markup = "<div class=\"container\"><h1>Status Report</h1></div>"
       result = tag :div, :class => "container" do
         tag :h1, :content => "Status Report"
@@ -47,6 +66,7 @@ describe Herbie::Helpers do
     end
 
     it "should output a collection of tags" do
+      pending "Need a mechanism for capturing erb output within a passed block"
       markup = <<-MARKUP
 <li><a href="/" title="Back to the homepage">Home</a></li>
 <li><a href="/shop" title="View all our products">Shop</a></li>
@@ -69,6 +89,7 @@ MARKUP
     end
     
     it "should allow an arbitrary class to be added to alternating elements within the collection" do
+      pending "Need a mechanism for capturing erb output within a passed block"
       markup = <<-MARKUP
 <li class="even">Annie</li>
 <li>Brenda</li>

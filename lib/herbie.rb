@@ -3,5 +3,5 @@ require 'herbie/generic_helpers.rb'
 require 'herbie/html_helpers.rb'
 
 module Herbie
-  VERSION = '0.1.2'
+  VERSION = '0.1.3'
 end

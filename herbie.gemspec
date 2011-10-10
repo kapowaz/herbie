@@ -10,6 +10,8 @@ Gem::Specification.new do |spec|
   spec.test_files  = Dir["spec/*"]
   spec.homepage    = 'http://github.com/kapowaz/herbie'
   spec.required_ruby_version = '>= 1.9.2'
+  spec.add_dependency 'tilt'
+  spec.add_dependency 'erubis'
   spec.add_development_dependency 'rspec', ['~> 2.6']
   spec.add_development_dependency 'colored'
 end

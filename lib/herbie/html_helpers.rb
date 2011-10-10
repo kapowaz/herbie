@@ -2,8 +2,7 @@ module Herbie
   module Helpers
     def tag(name, attrs={}, &block)
       if block_given?
-        erb_concat "<#{name}#{' ' + attributes(attrs) unless attrs.nil? || attrs.empty?}>#{capture_erb(&block)}</#{name}>" # if we're capturing ERB...
-        "<#{name}#{' ' + attributes(attrs) unless attrs.empty?}>#{block.call}</#{name}>" # if we're nesting function calls...
+        erb_concat "<#{name}#{' ' + attributes(attrs) unless attrs.nil? || attrs.empty?}>#{capture_erb(&block)}</#{name}>"
       elsif !attrs[:content].nil?
         content = attrs.delete :content
         "<#{name}#{' ' + attributes(attrs) unless attrs.empty?}>#{content}</#{name}>"
@@ -12,7 +11,7 @@ module Herbie
       end
     end
     
-    # work in progress...
+    # work in progress
     def tags(name, collection, attrs={}, &block)
       cycle = attrs.delete :cycle
       result = ""
