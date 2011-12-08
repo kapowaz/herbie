@@ -2,7 +2,7 @@ module Herbie
   module Helpers
     def tag(name, attrs={}, &block)
       if block_given?
-        erb_concat "<#{name}#{' ' + attributes(attrs) unless attrs.nil? || attrs.empty?}>#{capture_erb(&block)}</#{name}>"
+        erb_concat "<#{name}#{' ' + attributes(attrs) unless attrs.nil? || attrs.empty?}>\n#{capture_erb(&block)}\n</#{name}>"
       elsif !attrs[:content].nil?
         content = attrs.delete :content
         "<#{name}#{' ' + attributes(attrs) unless attrs.empty?}>#{content}</#{name}>"
@@ -44,7 +44,7 @@ module Herbie
       if block_given?
         erb_concat "#{tag :script, attrs}\n#{capture_erb(&block)}\n</script>"
       else
-        source = "/javascripts/#{source}" unless source.nil? || source.match(/^\//) || source.match(/^http/)
+        source = "/javascripts/#{source}" unless source.nil? || source.match(/^\/{1,2}|^http:\/\/|^https:\/\//)
         attrs = attrs.merge({:src => source})
         "#{tag :script, attrs}</script>"
       end
@@ -60,7 +60,7 @@ module Herbie
         default_attrs.delete :rel
         erb_concat "#{tag :style, default_attrs.merge(attrs)}\n#{capture_erb(&block)}\n</style>"
       else
-        href = "/stylesheets/#{href}" unless href.match(/^\//)
+        href = "/stylesheets/#{href}" unless href.match(/^\/{1,2}|^http:\/\/|^https:\/\//)
         attrs = default_attrs.merge({:href => href}.merge(attrs))
         "#{tag :link, attrs}"        
       end
@@ -72,6 +72,20 @@ module Herbie
         erb_concat "#{tag :a, attrs}#{capture_erb(&block)}</a>"
       else
         "#{tag :a, attrs}#{text ||= attrs[:href]}</a>"
+      end
+    end
+    
+    def content_for(name, content=nil, &block)
+      @captured_content ||= {}
+      
+      if content || block_given?
+        if @captured_content.key? name
+          @capured_content[name] += content || capture_erb(&block)
+        else
+          @capured_content[name] = content || capture_erb(&block)
+        end
+      else
+        @captured_content[name]
       end
     end
     
