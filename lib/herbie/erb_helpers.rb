@@ -4,7 +4,7 @@ require 'erubis'
 module Herbie
   module Helpers
     private
-    
+
     def erb_with_output_buffer(buf = '')
       @_out_buf, old_buffer = buf, @_out_buf
       yield
@@ -20,6 +20,6 @@ module Herbie
     def erb_concat(text)
       @_out_buf << text unless @_out_buf.nil?
     end
-    
+
   end
 end
