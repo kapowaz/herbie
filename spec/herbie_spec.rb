@@ -3,7 +3,7 @@ require_relative "../lib/herbie.rb"
 
 describe Herbie::Helpers do
   include Herbie::Helpers
-  
+
   describe "tag helpers" do
     it "should be able to output a simple tag" do
       attrs = {
@@ -74,7 +74,7 @@ HTML
 <li><a href="/contactus" title="Get in touch with us">Contact Us</a></li>
 <li><a href="/help" title="Can't find what you need? Get help here">Help</a></li>
 MARKUP
-      
+
       navigation_items = [
         {:text => "Home", :href => "/", :title => "Back to the homepage"},
         {:text => "Shop", :href => "/shop", :title => "View all our products"},
@@ -87,7 +87,7 @@ MARKUP
       end
       result.should == markup
     end
-    
+
     it "should allow an arbitrary class to be added to alternating elements within the collection" do
       pending "Need a mechanism for capturing erb output within a passed block"
       markup = <<-MARKUP
@@ -105,55 +105,55 @@ MARKUP
       result.should == markup
     end
   end
-  
+
   describe "script helpers" do
     it "should prefix the path to the script with ‘/javascripts’ if the script path is relative" do
       script("script.js").should == "<script type=\"text/javascript\" charset=\"utf-8\" src=\"/javascripts/script.js\"></script>"
     end
-    
+
     it "should output a script with an absolute path to the script if the path provided was absolute" do
       script("/path/to/script.js").should == "<script type=\"text/javascript\" charset=\"utf-8\" src=\"/path/to/script.js\"></script>"
     end
-    
+
     it "should output a script with an absolute path to the script if the path provided begins with http://, https:// or //" do
       script("http://code.jquery.com/jquery.js").should == "<script type=\"text/javascript\" charset=\"utf-8\" src=\"http://code.jquery.com/jquery.js\"></script>" and
       script("https://code.jquery.com/jquery.js").should == "<script type=\"text/javascript\" charset=\"utf-8\" src=\"https://code.jquery.com/jquery.js\"></script>" and
       script("//code.jquery.com/jquery.js").should == "<script type=\"text/javascript\" charset=\"utf-8\" src=\"//code.jquery.com/jquery.js\"></script>"
     end
-    
+
     it "should output a script element with arbitrary javascript content provided by a block" do
       pending "Need a mechanism for capturing erb output within a passed block"
       script_block = Proc.new { "function hello_world(){ console.log(\"hello world!\"); }" }
       script(&script_block).should == "<script type=\"text/javascript\" charset=\"utf-8\">\n#{capture_erb(&script_block)}\n</script>"
     end
-    
+
     it "should output a jQuery script include with the specified options" do
       pending "NYI"
-      
+
       jquery(:version => "1.5.0", :min => false, :cdn => :google).should == "<script type=\"text/javascript\" charset=\"utf-8\" src=\"\"></script>"
     end
   end
-  
+
   describe "stylesheet helpers" do
     it "should prefix the path to the script with ‘/stylesheets’ if the stylesheet path is relative" do
       style("foo.css").should == "<link rel=\"stylesheet\" type=\"text/css\" href=\"/stylesheets/foo.css\">"
     end
-    
+
     it "should output a link element with the absolute path to the stylesheet if the path provided was absolute" do
       style("/style/foo.css").should == "<link rel=\"stylesheet\" type=\"text/css\" href=\"/style/foo.css\">"
     end
-    
+
     it "should output a link element with the absolute path to the stylesheet if the path provided starts with http://, https:// or //" do
       style("http://foo.com/style/bar.css").should == "<link rel=\"stylesheet\" type=\"text/css\" href=\"http://foo.com/style/bar.css\">" and
       style("https://foo.com/style/bar.css").should == "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://foo.com/style/bar.css\">" and
       style("//foo.com/style/bar.css").should == "<link rel=\"stylesheet\" type=\"text/css\" href=\"//foo.com/style/bar.css\">"
     end
-    
+
     it "should output a link element with appropriate media query attribute if provided" do
       media = "screen and (min-width:500px)"
       style("/style/foo.css", :media => media).should == "<link rel=\"stylesheet\" type=\"text/css\" href=\"/style/foo.css\" media=\"#{media}\">"
     end
-    
+
     it "should output a style element with arbitrary content provided by a block" do
       pending "Need a mechanism for capturing erb output within a passed block"
       media     = "screen and (min-width:500px)"
@@ -161,19 +161,19 @@ MARKUP
       style({:media => media}, &css_block).should == "<style type=\"text/css\" media=\"#{media}\">\n#{capture_erb(&css_block)}\n</style>"
     end
   end
-  
+
   describe "link helpers" do
     it "should be able to output a simple link" do
       href = "http://www.foo.com/"
       link_to(href).should == "<a href=\"#{href}\">#{href}</a>"
     end
-    
+
     it "should be able to output a link with href and text" do
       href = "http://www.foo.com/"
       text = "Visit foo.com"
       link_to(href, text).should == "<a href=\"#{href}\">#{text}</a>"
     end
-    
+
     it "should be able to output links with arbitrary attributes" do
       href = "http://www.foo.com/"
       text = "Visit foo.com"
@@ -183,7 +183,7 @@ MARKUP
       }
       link_to(href, text, attrs).should == "<a href=\"#{href}\" class=\"#{attrs[:class]}\" target=\"#{attrs[:target]}\">#{text}</a>"
     end
-    
+
     it "should be able to output a link enclosing arbitrary markup provided by a block" do
       pending "Need a mechanism for capturing erb output within a passed block"
       href = "http://www.foo.com/"
@@ -195,7 +195,7 @@ MARKUP
       link_to(href, text, attrs, &markup_block).should == "<a href=\"#{href}\" class=\"#{attrs[:class]}\">#{capture_erb(&markup_block)}</a>"
     end
   end
-  
+
   describe "content helpers" do
     it "should accept a named block of content which can then be displayed elsewhere later" do
       pending "Need a mechanism for capturing erb output within a passed block"
@@ -204,7 +204,7 @@ MARKUP
         "<script type=\"text/javascript\" charset=\"utf-8\" src=\"/application.js\">"
         # Tilt['erb'].new { "%><%= script 'application.js' %><%" }
       end
-      
+
       content_for(:script).should == "<script type=\"text/javascript\" charset=\"utf-8\" src=\"/application.js\">"
     end
   end

@@ -10,14 +10,14 @@ module Herbie
         "<#{name}#{' ' + attributes(attrs) unless attrs.empty?}>"
       end
     end
-    
+
     # work in progress
     def tags(name, collection, attrs={}, &block)
       cycle = attrs.delete :cycle
       result = ""
       collection.each_with_index do |item, i|
         a = attrs.dup
-        
+
         unless cycle.nil?
           c = a.delete :class
           classes = []
@@ -26,7 +26,7 @@ module Herbie
           classes << cycle[:odd] if i.odd? && cycle.key?(:odd)
           a[:class] = classes.join " " unless classes.empty?
         end
-        
+
         result += tag name, a do
           block.call(item)
         end
@@ -34,13 +34,13 @@ module Herbie
       end
       result
     end
-  
+
     def script(source=nil, &block)
       attrs = {
         :type    => "text/javascript",
         :charset => "utf-8"
       }
-      
+
       if block_given?
         erb_concat "#{tag :script, attrs}\n#{capture_erb(&block)}\n</script>"
       else
@@ -49,23 +49,23 @@ module Herbie
         "#{tag :script, attrs}</script>"
       end
     end
-    
+
     def style(href=nil, attrs={}, &block)
       default_attrs = {
         :rel  => "stylesheet",
         :type => "text/css"
       }
-      
+
       if block_given?
         default_attrs.delete :rel
         erb_concat "#{tag :style, default_attrs.merge(attrs)}\n#{capture_erb(&block)}\n</style>"
       else
         href = "/stylesheets/#{href}" unless href.match(/^\/{1,2}|^http:\/\/|^https:\/\//)
         attrs = default_attrs.merge({:href => href}.merge(attrs))
-        "#{tag :link, attrs}"        
+        "#{tag :link, attrs}"
       end
     end
-    
+
     def link_to(href, text=nil, attrs={}, &block)
       attrs = {:href => href}.merge(attrs)
       if block_given?
@@ -74,10 +74,10 @@ module Herbie
         "#{tag :a, attrs}#{text ||= attrs[:href]}</a>"
       end
     end
-    
+
     def content_for(name, content=nil, &block)
       @captured_content ||= {}
-      
+
       if content || block_given?
         if @captured_content.key? name
           @capured_content[name] += content || capture_erb(&block)
@@ -88,6 +88,6 @@ module Herbie
         @captured_content[name]
       end
     end
-    
+
   end
 end

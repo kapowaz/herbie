@@ -19,7 +19,7 @@ module Herbie
         end
       end
       a.join(' ')
-    end 
+    end
 
   end
 end
