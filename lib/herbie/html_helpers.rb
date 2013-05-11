@@ -4,8 +4,13 @@ module Herbie
       if block_given?
         erb_concat "<#{name}#{' ' + attributes(attrs) unless attrs.nil? || attrs.empty?}>\n#{capture_erb(&block)}\n</#{name}>"
       elsif !attrs[:content].nil?
-        content = attrs.delete :content
-        "<#{name}#{' ' + attributes(attrs) unless attrs.empty?}>#{content}</#{name}>"
+        case name
+        when :meta
+          "<#{name}#{' ' + attributes(attrs) unless attrs.empty?}>"
+        else
+          content = attrs.delete :content
+          "<#{name}#{' ' + attributes(attrs) unless attrs.empty?}>#{content}</#{name}>"
+        end
       else
         "<#{name}#{' ' + attributes(attrs) unless attrs.empty?}>"
       end

@@ -37,6 +37,15 @@ describe Herbie::Helpers do
 
       tag(:input, attrs).should == "<input type=\"#{attrs[:type]}\" name=\"#{attrs[:name]}\" value=\"#{attrs[:value]}\" checked>"
     end
+    
+    it "should output the content parameter as an attribute on meta tags" do
+      attrs = {
+        :name    => "viewport",
+        :content => "width=device-width, user-scalable=yes, initial-scale=1.0"
+      }
+      
+      tag(:meta, attrs).should == "<meta name=\"#{attrs[:name]}\" content=\"#{attrs[:content]}\">"
+    end
 
     it "should output tags mixed with ERB" do
       pending "Need a mechanism for capturing erb output within a passed block"
