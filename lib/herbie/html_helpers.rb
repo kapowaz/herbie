@@ -40,7 +40,7 @@ module Herbie
       result
     end
 
-    def script(source=nil, &block)
+    def script(source=nil, options={}, &block)
       attrs = {
         :type    => "text/javascript",
         :charset => "utf-8"
@@ -50,6 +50,7 @@ module Herbie
         erb_concat "#{tag :script, attrs}\n#{capture_erb(&block)}\n</script>"
       else
         source = "/javascripts/#{source}" unless source.nil? || source.match(/^\/{1,2}|^http:\/\/|^https:\/\//)
+        source = source.sub(/.js$/, '.min.js') if source && options[:minified] && !source.match(/.min.js$/)
         attrs = attrs.merge({:src => source})
         "#{tag :script, attrs}</script>"
       end
@@ -66,6 +67,12 @@ module Herbie
         erb_concat "#{tag :style, default_attrs.merge(attrs)}\n#{capture_erb(&block)}\n</style>"
       else
         href = "/stylesheets/#{href}" unless href.match(/^\/{1,2}|^http:\/\/|^https:\/\//)
+        
+        if attrs[:minified]
+          attrs.delete :minified
+          href = href.sub(/.css$/, '.min.css') if href && !href.match(/.min.css$/)
+        end
+        
         attrs = default_attrs.merge({:href => href}.merge(attrs))
         "#{tag :link, attrs}"
       end

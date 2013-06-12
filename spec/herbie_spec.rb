@@ -129,6 +129,10 @@ MARKUP
       script("https://code.jquery.com/jquery.js").should == "<script type=\"text/javascript\" charset=\"utf-8\" src=\"https://code.jquery.com/jquery.js\"></script>" and
       script("//code.jquery.com/jquery.js").should == "<script type=\"text/javascript\" charset=\"utf-8\" src=\"//code.jquery.com/jquery.js\"></script>"
     end
+    
+    it "should output a modified URL with .min.js as the file extension when the minified option is true" do
+      script("/path/to/script.js", :minified => true).should == "<script type=\"text/javascript\" charset=\"utf-8\" src=\"/path/to/script.min.js\"></script>"
+    end
 
     it "should output a script element with arbitrary javascript content provided by a block" do
       pending "Need a mechanism for capturing erb output within a passed block"
@@ -161,6 +165,10 @@ MARKUP
     it "should output a link element with appropriate media query attribute if provided" do
       media = "screen and (min-width:500px)"
       style("/style/foo.css", :media => media).should == "<link rel=\"stylesheet\" type=\"text/css\" href=\"/style/foo.css\" media=\"#{media}\">"
+    end
+    
+    it "should output a modified URL with .min.css as the file extension when the minified option is true" do
+      style("/style/foo.css", :minified => true).should == "<link rel=\"stylesheet\" type=\"text/css\" href=\"/style/foo.min.css\">"
     end
 
     it "should output a style element with arbitrary content provided by a block" do
