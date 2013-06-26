@@ -46,6 +46,90 @@ describe Herbie::Helpers do
       
       tag(:meta, attrs).should == "<meta name=\"#{attrs[:name]}\" content=\"#{attrs[:content]}\">"
     end
+    
+    it "should output select tags with a supplied list of options" do
+      attrs = {
+        :name => "colour",
+        :options => [
+          {:content => "White",  :value => :common},
+          {:content => "Green",  :value => :uncommon},
+          {:content => "Blue",   :value => :rare},
+          {:content => "Purple", :value => :epic},
+          {:content => "Orange", :value => :legendary}
+        ]
+      }
+      
+      tag(:select, attrs).should == "<select name=\"colour\"><option value=\"common\">White</option><option value=\"uncommon\">Green</option><option value=\"rare\">Blue</option><option value=\"epic\">Purple</option><option value=\"legendary\">Orange</option></select>"
+    end
+    
+    it "should output select tags with a supplied list of optgroups" do
+      attrs = {
+        :name => "vehicles",
+        :options => [
+          {
+            :label => "Cars",
+            :options => [
+              {:content => "Ferrari", :value => :ferrari},
+              {:content => "Volkswagen", :value => :vw},
+              {:content => "Ford", :value => :ford}
+            ]
+          },
+          {
+            :label => "Trucks",
+            :options => [
+              {:content => "Volvo", :value => :volvo},
+              {:content => "Toyota", :value => :toyota},
+              {:content => "General Motors", :value => :gm}
+            ]
+          },
+          {
+            :label => "Bikes",
+            :options => [
+              {:content => "Suzuki", :value => :suzuki},
+              {:content => "Ducati", :value => :ducati},
+              {:content => "Kawasaki", :value => :kawasaki}
+            ]
+          }
+        ]
+      }
+      
+      tag(:select, attrs).should == "<select name=\"vehicles\"><optgroup label=\"Cars\"><option value=\"ferrari\">Ferrari</option><option value=\"vw\">Volkswagen</option><option value=\"ford\">Ford</option></optgroup><optgroup label=\"Trucks\"><option value=\"volvo\">Volvo</option><option value=\"toyota\">Toyota</option><option value=\"gm\">General Motors</option></optgroup><optgroup label=\"Bikes\"><option value=\"suzuki\">Suzuki</option><option value=\"ducati\">Ducati</option><option value=\"kawasaki\">Kawasaki</option></optgroup></select>"
+    end
+    
+    it "should output select tags with a mixed list of optgroups and options" do
+      attrs = {
+        :name => "vehicles",
+        :options => [
+          {:content => "— Choose —"},
+          {
+            :label => "Cars",
+            :options => [
+              {:content => "Ferrari", :value => :ferrari},
+              {:content => "Volkswagen", :value => :vw},
+              {:content => "Ford", :value => :ford}
+            ]
+          },
+          {
+            :label => "Trucks",
+            :options => [
+              {:content => "Volvo", :value => :volvo},
+              {:content => "Toyota", :value => :toyota},
+              {:content => "General Motors", :value => :gm}
+            ]
+          },
+          {
+            :label => "Bikes",
+            :options => [
+              {:content => "Suzuki", :value => :suzuki},
+              {:content => "Ducati", :value => :ducati},
+              {:content => "Kawasaki", :value => :kawasaki}
+            ]
+          }
+        ]
+      }
+      
+      tag(:select, attrs).should == "<select name=\"vehicles\"><option>— Choose —</option><optgroup label=\"Cars\"><option value=\"ferrari\">Ferrari</option><option value=\"vw\">Volkswagen</option><option value=\"ford\">Ford</option></optgroup><optgroup label=\"Trucks\"><option value=\"volvo\">Volvo</option><option value=\"toyota\">Toyota</option><option value=\"gm\">General Motors</option></optgroup><optgroup label=\"Bikes\"><option value=\"suzuki\">Suzuki</option><option value=\"ducati\">Ducati</option><option value=\"kawasaki\">Kawasaki</option></optgroup></select>"
+    end
 
     it "should output tags mixed with ERB" do
       pending "Need a mechanism for capturing erb output within a passed block"
