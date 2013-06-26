@@ -12,7 +12,20 @@ module Herbie
           "<#{name}#{' ' + attributes(attrs) unless attrs.empty?}>#{content}</#{name}>"
         end
       else
-        "<#{name}#{' ' + attributes(attrs) unless attrs.empty?}>"
+        case name
+        when :select          
+          option_tags = attrs.delete(:options).collect do |option|
+            if option.key? :label
+              option[:content] = option.delete(:options).collect {|o| tag :option, o}.join
+              tag :optgroup, option
+            else
+              tag :option, option
+            end
+          end.join
+          "<#{name}#{' ' + attributes(attrs) unless attrs.empty?}>#{option_tags}</#{name}>"
+        else
+          "<#{name}#{' ' + attributes(attrs) unless attrs.empty?}>"
+        end
       end
     end
 
