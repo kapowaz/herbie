@@ -1,7 +1,7 @@
 Gem::Specification.new do |spec|
   spec.name        = 'herbie'
-  spec.version     = '0.2.0'
-  spec.date        = '2013-06-12'
+  spec.version     = '0.3.1'
+  spec.date        = '2013-06-26'
   spec.summary     = "herbie"
   spec.description = "Lovable HTML view helpers for use with ERB."
   spec.authors     = ["Ben Darlow"]
