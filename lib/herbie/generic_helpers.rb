@@ -9,12 +9,16 @@ module Herbie
 
     def attributes(hash)
       a = []
-      hash.each_pair do |k,v|
-        unless v.nil?
-          if v === true
-            a.push "#{snake_case(k.to_s).sub(/^(.{1,1})/) { |m| m.downcase }}"
+      hash.each_pair do |attribute, value|
+        unless value.nil?
+          if value === true
+            a.push "#{snake_case(attribute.to_s).sub(/^(.{1,1})/) { |m| m.downcase }}"
           else
-            a.push "#{snake_case(k.to_s).sub(/^(.{1,1})/) { |m| m.downcase }}=\"#{v}\""
+            if attribute == :class && value.class == Array
+              a.push "#{snake_case(attribute.to_s).sub(/^(.{1,1})/) { |m| m.downcase }}=\"#{value.join(' ')}\""
+            else
+              a.push "#{snake_case(attribute.to_s).sub(/^(.{1,1})/) { |m| m.downcase }}=\"#{value}\""
+            end
           end
         end
       end

@@ -48,6 +48,14 @@ describe Herbie::Helpers do
       tag(:meta, attrs).should == "<meta name=\"#{attrs[:name]}\" content=\"#{attrs[:content]}\">"
     end
     
+    it "should ignore passed attributes with a nil value" do
+      tag(:div, :class => nil, :content => "They have absolutely no class, and they're always on the hustle.").should == "<div>They have absolutely no class, and they're always on the hustle.</div>"
+    end
+    
+    it "should output all class names supplied as an array" do
+      tag(:div, :class => [:foo, :bar], :content => "hello world").should == "<div class=\"foo bar\">hello world</div>"
+    end
+    
     it "should automatically close span tags when no content is supplied" do
       tag(:span).should == "<span></span>"
     end
