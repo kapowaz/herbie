@@ -2,14 +2,14 @@ module Herbie
   module Helpers
     def tag(name, attrs={}, &block)
       if block_given?
-        erb_concat "<#{name}#{' ' + attributes(attrs) unless attrs.nil? || attrs.empty?}>\n#{capture_erb(&block)}\n</#{name}>\n"
+        erb_concat "<#{name}#{' ' + attributes(attrs) unless attrs.nil? || attrs.empty? || attributes(attrs).empty?}>\n#{capture_erb(&block)}\n</#{name}>\n"
       elsif !attrs[:content].nil?
         case name
         when :meta
-          "<#{name}#{' ' + attributes(attrs) unless attrs.empty?}>"
+          "<#{name}#{' ' + attributes(attrs) unless attrs.empty? || attributes(attrs).empty?}>"
         else
           content = attrs.delete :content
-          "<#{name}#{' ' + attributes(attrs) unless attrs.empty?}>#{content}</#{name}>"
+          "<#{name}#{' ' + attributes(attrs) unless attrs.empty? || attributes(attrs).empty?}>#{content}</#{name}>"
         end
       else
         case name
@@ -22,11 +22,11 @@ module Herbie
               tag :option, option
             end
           end.join
-          "<#{name}#{' ' + attributes(attrs) unless attrs.empty?}>#{option_tags}</#{name}>"
+          "<#{name}#{' ' + attributes(attrs) unless attrs.empty? || attributes(attrs).empty?}>#{option_tags}</#{name}>"
         when :span
-          "<#{name}#{' ' + attributes(attrs) unless attrs.empty?}></#{name}>"
+          "<#{name}#{' ' + attributes(attrs) unless attrs.empty? || attributes(attrs).empty?}></#{name}>"
         else
-          "<#{name}#{' ' + attributes(attrs) unless attrs.empty?}>"
+          "<#{name}#{' ' + attributes(attrs) unless attrs.empty? || attributes(attrs).empty?}>"
         end
       end
     end
