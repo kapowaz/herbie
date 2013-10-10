@@ -24,5 +24,6 @@ DEPENDENCIES
   erubis
   rake
   rspec
+  rspec-expectations
   semver
   tilt

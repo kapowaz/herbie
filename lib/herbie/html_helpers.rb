@@ -2,7 +2,7 @@ module Herbie
   module Helpers
     def tag(name, attrs={}, &block)
       if block_given?
-        erb_concat "<#{name}#{' ' + attributes(attrs) unless attrs.nil? || attrs.empty?}>\n#{capture_erb(&block)}\n</#{name}>"
+        erb_concat "<#{name}#{' ' + attributes(attrs) unless attrs.nil? || attrs.empty?}>\n#{capture_erb(&block)}\n</#{name}>\n"
       elsif !attrs[:content].nil?
         case name
         when :meta
@@ -23,6 +23,8 @@ module Herbie
             end
           end.join
           "<#{name}#{' ' + attributes(attrs) unless attrs.empty?}>#{option_tags}</#{name}>"
+        when :span
+          "<#{name}#{' ' + attributes(attrs) unless attrs.empty?}></#{name}>"
         else
           "<#{name}#{' ' + attributes(attrs) unless attrs.empty?}>"
         end
@@ -60,7 +62,7 @@ module Herbie
       }
 
       if block_given?
-        erb_concat "#{tag :script, attrs}\n#{capture_erb(&block)}\n</script>"
+        erb_concat "#{tag :script, attrs}\n#{capture_erb(&block)}\n</script>\n"
       else
         source = "/javascripts/#{source}" unless source.nil? || source.match(/^\/{1,2}|^http:\/\/|^https:\/\//)
         source = source.sub(/.js$/, '.min.js') if source && options[:minified] && !source.match(/.min.js$/)
@@ -77,7 +79,7 @@ module Herbie
 
       if block_given?
         default_attrs.delete :rel
-        erb_concat "#{tag :style, default_attrs.merge(attrs)}\n#{capture_erb(&block)}\n</style>"
+        erb_concat "#{tag :style, default_attrs.merge(attrs)}\n#{capture_erb(&block)}\n</style>\n"
       else
         href = "/stylesheets/#{href}" unless href.match(/^\/{1,2}|^http:\/\/|^https:\/\//)
         

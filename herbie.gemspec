@@ -1,7 +1,7 @@
 Gem::Specification.new do |spec|
   spec.name        = 'herbie'
-  spec.version     = '0.3.1'
-  spec.date        = '2013-06-26'
+  spec.version     = '0.3.2'
+  spec.date        = '2013-10-10'
   spec.summary     = "herbie"
   spec.description = "Lovable HTML view helpers for use with ERB."
   spec.authors     = ["Ben Darlow"]
@@ -13,5 +13,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'tilt'
   spec.add_dependency 'erubis'
   spec.add_development_dependency 'rspec', ['~> 2.6']
+  spec.add_development_dependency 'rspec-expectations', ['~> 2.14']
   spec.add_development_dependency 'colored'
 end

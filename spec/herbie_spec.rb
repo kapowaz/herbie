@@ -1,5 +1,6 @@
 # encoding: utf-8
 require_relative "../lib/herbie.rb"
+require "rspec/expectations"
 
 describe Herbie::Helpers do
   include Herbie::Helpers
@@ -45,6 +46,19 @@ describe Herbie::Helpers do
       }
       
       tag(:meta, attrs).should == "<meta name=\"#{attrs[:name]}\" content=\"#{attrs[:content]}\">"
+    end
+    
+    it "should automatically close span tags when no content is supplied" do
+      tag(:span).should == "<span></span>"
+    end
+    
+    it "should output a new line after passing a block to a tag" do
+      pending "Need a mechanism for capturing erb output within a passed block"
+      output = tag :div do
+        "hello world"
+      end
+      
+      output.should end_with "\n"
     end
     
     it "should output select tags with a supplied list of options" do
