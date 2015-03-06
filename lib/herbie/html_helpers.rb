@@ -13,7 +13,7 @@ module Herbie
         end
       else
         case name
-        when :select          
+        when :select
           option_tags = attrs.delete(:options).collect do |option|
             if option.key? :label
               option[:content] = option.delete(:options).collect {|o| tag :option, o}.join
@@ -82,12 +82,12 @@ module Herbie
         erb_concat "#{tag :style, default_attrs.merge(attrs)}\n#{capture_erb(&block)}\n</style>\n"
       else
         href = "/stylesheets/#{href}" unless href.match(/^\/{1,2}|^http:\/\/|^https:\/\//)
-        
+
         if attrs[:minified]
           attrs.delete :minified
           href = href.sub(/.css$/, '.min.css') if href && !href.match(/.min.css$/)
         end
-        
+
         attrs = default_attrs.merge({:href => href}.merge(attrs))
         "#{tag :link, attrs}"
       end
@@ -99,20 +99,6 @@ module Herbie
         erb_concat "#{tag :a, attrs}#{capture_erb(&block)}</a>"
       else
         "#{tag :a, attrs}#{text ||= attrs[:href]}</a>"
-      end
-    end
-
-    def content_for(name, content=nil, &block)
-      @captured_content ||= {}
-
-      if content || block_given?
-        if @captured_content.key? name
-          @capured_content[name] += content || capture_erb(&block)
-        else
-          @capured_content[name] = content || capture_erb(&block)
-        end
-      else
-        @captured_content[name]
       end
     end
 

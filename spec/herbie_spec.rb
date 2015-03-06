@@ -38,37 +38,37 @@ describe Herbie::Helpers do
 
       tag(:input, attrs).should == "<input type=\"#{attrs[:type]}\" name=\"#{attrs[:name]}\" value=\"#{attrs[:value]}\" checked>"
     end
-    
+
     it "should output the content parameter as an attribute on meta tags" do
       attrs = {
         :name    => "viewport",
         :content => "width=device-width, user-scalable=yes, initial-scale=1.0"
       }
-      
+
       tag(:meta, attrs).should == "<meta name=\"#{attrs[:name]}\" content=\"#{attrs[:content]}\">"
     end
-    
+
     it "should ignore passed attributes with a nil value" do
       tag(:div, :class => nil, :content => "They have absolutely no class, and they're always on the hustle.").should == "<div>They have absolutely no class, and they're always on the hustle.</div>"
     end
-    
+
     it "should output all class names supplied as an array" do
       tag(:div, :class => [:foo, :bar], :content => "hello world").should == "<div class=\"foo bar\">hello world</div>"
     end
-    
+
     it "should automatically close span tags when no content is supplied" do
       tag(:span).should == "<span></span>"
     end
-    
+
     it "should output a new line after passing a block to a tag" do
       pending "Need a mechanism for capturing erb output within a passed block"
       output = tag :div do
         "hello world"
       end
-      
+
       output.should end_with "\n"
     end
-    
+
     it "should output select tags with a supplied list of options" do
       attrs = {
         :name => "colour",
@@ -80,10 +80,10 @@ describe Herbie::Helpers do
           {:content => "Orange", :value => :legendary}
         ]
       }
-      
+
       tag(:select, attrs).should == "<select name=\"colour\"><option value=\"common\">White</option><option value=\"uncommon\">Green</option><option value=\"rare\">Blue</option><option value=\"epic\">Purple</option><option value=\"legendary\">Orange</option></select>"
     end
-    
+
     it "should output select tags with a supplied list of optgroups" do
       attrs = {
         :name => "vehicles",
@@ -114,10 +114,10 @@ describe Herbie::Helpers do
           }
         ]
       }
-      
+
       tag(:select, attrs).should == "<select name=\"vehicles\"><optgroup label=\"Cars\"><option value=\"ferrari\">Ferrari</option><option value=\"vw\">Volkswagen</option><option value=\"ford\">Ford</option></optgroup><optgroup label=\"Trucks\"><option value=\"volvo\">Volvo</option><option value=\"toyota\">Toyota</option><option value=\"gm\">General Motors</option></optgroup><optgroup label=\"Bikes\"><option value=\"suzuki\">Suzuki</option><option value=\"ducati\">Ducati</option><option value=\"kawasaki\">Kawasaki</option></optgroup></select>"
     end
-    
+
     it "should output select tags with a mixed list of optgroups and options" do
       attrs = {
         :name => "vehicles",
@@ -149,7 +149,7 @@ describe Herbie::Helpers do
           }
         ]
       }
-      
+
       tag(:select, attrs).should == "<select name=\"vehicles\"><option>— Choose —</option><optgroup label=\"Cars\"><option value=\"ferrari\">Ferrari</option><option value=\"vw\">Volkswagen</option><option value=\"ford\">Ford</option></optgroup><optgroup label=\"Trucks\"><option value=\"volvo\">Volvo</option><option value=\"toyota\">Toyota</option><option value=\"gm\">General Motors</option></optgroup><optgroup label=\"Bikes\"><option value=\"suzuki\">Suzuki</option><option value=\"ducati\">Ducati</option><option value=\"kawasaki\">Kawasaki</option></optgroup></select>"
     end
 
@@ -235,7 +235,7 @@ MARKUP
       script("https://code.jquery.com/jquery.js").should == "<script type=\"text/javascript\" charset=\"utf-8\" src=\"https://code.jquery.com/jquery.js\"></script>" and
       script("//code.jquery.com/jquery.js").should == "<script type=\"text/javascript\" charset=\"utf-8\" src=\"//code.jquery.com/jquery.js\"></script>"
     end
-    
+
     it "should output a modified URL with .min.js as the file extension when the minified option is true" do
       script("/path/to/script.js", :minified => true).should == "<script type=\"text/javascript\" charset=\"utf-8\" src=\"/path/to/script.min.js\"></script>"
     end
@@ -272,7 +272,7 @@ MARKUP
       media = "screen and (min-width:500px)"
       style("/style/foo.css", :media => media).should == "<link rel=\"stylesheet\" type=\"text/css\" href=\"/style/foo.css\" media=\"#{media}\">"
     end
-    
+
     it "should output a modified URL with .min.css as the file extension when the minified option is true" do
       style("/style/foo.css", :minified => true).should == "<link rel=\"stylesheet\" type=\"text/css\" href=\"/style/foo.min.css\">"
     end
@@ -316,19 +316,6 @@ MARKUP
       }
       markup_block = Proc.new { tag :img, :src => "foo.png" }
       link_to(href, text, attrs, &markup_block).should == "<a href=\"#{href}\" class=\"#{attrs[:class]}\">#{capture_erb(&markup_block)}</a>"
-    end
-  end
-
-  describe "content helpers" do
-    it "should accept a named block of content which can then be displayed elsewhere later" do
-      pending "Need a mechanism for capturing erb output within a passed block"
-
-      content_for :script do
-        "<script type=\"text/javascript\" charset=\"utf-8\" src=\"/application.js\">"
-        # Tilt['erb'].new { "%><%= script 'application.js' %><%" }
-      end
-
-      content_for(:script).should == "<script type=\"text/javascript\" charset=\"utf-8\" src=\"/application.js\">"
     end
   end
 end
