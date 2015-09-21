@@ -153,6 +153,14 @@ describe Herbie::Helpers do
       tag(:select, attrs).should == "<select name=\"vehicles\"><option>— Choose —</option><optgroup label=\"Cars\"><option value=\"ferrari\">Ferrari</option><option value=\"vw\">Volkswagen</option><option value=\"ford\">Ford</option></optgroup><optgroup label=\"Trucks\"><option value=\"volvo\">Volvo</option><option value=\"toyota\">Toyota</option><option value=\"gm\">General Motors</option></optgroup><optgroup label=\"Bikes\"><option value=\"suzuki\">Suzuki</option><option value=\"ducati\">Ducati</option><option value=\"kawasaki\">Kawasaki</option></optgroup></select>"
     end
 
+    it "should output closing textarea tag when supplied with empty content" do
+      attrs = {
+        id:          'comment',
+        placeholder: 'Any comments?'
+      }
+      tag(:textarea, attrs).should == "<textarea id=\"comment\" placeholder=\"Any comments?\"></textarea>"
+    end
+
     it "should output tags mixed with ERB" do
       pending "Need a mechanism for capturing erb output within a passed block"
       erb_fragment = <<-ERB

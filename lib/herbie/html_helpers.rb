@@ -23,7 +23,7 @@ module Herbie
             end
           end.join
           "<#{name}#{' ' + attributes(attrs) unless attrs.empty? || attributes(attrs).empty?}>#{option_tags}</#{name}>"
-        when :span
+        when :span, :textarea
           "<#{name}#{' ' + attributes(attrs) unless attrs.empty? || attributes(attrs).empty?}></#{name}>"
         else
           "<#{name}#{' ' + attributes(attrs) unless attrs.empty? || attributes(attrs).empty?}>"
